@@ -1,1 +1,30 @@
-# Log Monitoring Dashboard (Flask + React + MongoDB) Real-time log monitoring dashboard for a DevOps semester project. ## Tech Stack - **Frontend:** React (Vite) - **Backend:** Flask + Flask-CORS + Flask-PyMongo - **Database:** MongoDB - **Containerization (optional):** Docker (used for MongoDB in local setup) ## Project Structure ```text Devops_Project/ ├── app.py ├── requirements.txt ├── Dockerfile ├── docker-compose.yml ├── frontend/ │ ├── package.json │ ├── index.html │ ├── vite.config.js │ └── src/ │ ├── App.jsx │ ├── App.css │ ├── main.jsx │ └── components/ │ ├── InjectPanel.jsx │ ├── LogChart.jsx │ ├── LogTable.jsx │ └── StatsBar.jsx └── README.md ``` ## Prerequisites - **Python** 3.11+ (3.13 also works) - **Node.js** 18+ and npm - **Docker Desktop** (recommended for MongoDB) --- ## 1) Start MongoDB (Docker) Start Docker Desktop first, then run: ```powershell docker run -d --name mongodb-local -p 27017:27017 mongo:7.0 ``` If container already exists: ```powershell docker start mongodb-local ``` Verify: ```powershell docker ps ``` You should see `mongodb-local` running and exposing `27017`. --- ## 2) Run Backend (Flask API) From project root: ```powershell cd C:\Users\User\Desktop\Devops_Project python -m pip install -r requirements.txt python app.py ``` Backend runs on: - `http://localhost:5000` Health check: - `http://localhost:5000/health` Expected: ```json {"status":"ok","timestamp":"..."} ``` --- ## 3) Run Frontend (React + Vite) Open a **new terminal**: ```powershell cd C:\Users\User\Desktop\Devops_Project\frontend npm install npm run dev ``` Open: - `http://localhost:5173` The frontend is configured to call backend APIs through Vite proxy (`/api -> http://localhost:5000`). --- ## 4) Verify Full Workflow 1. Open dashboard in browser 2. Inject a log from **Inject Log** panel 3. Confirm: - Log appears in table - Stats cards update - Chart updates 4. Wait 3+ seconds and verify live refresh still works 5. Click **Clear All** and verify logs reset --- ## API Endpoints - `GET /health` - health check - `GET /logs` - fetch logs - `POST /logs` - add log - `DELETE /logs` - clear all logs - `DELETE /logs/` - delete one log - `GET /logs/stats` - stats by log type Example `POST /logs` body: ```json { "message": "User authenticated", "type": "INFO", "source": "api-gateway" } ``` Allowed `type` values: `INFO`, `WARN`, `ERROR` --- ## Environment Notes - Backend uses: - `MONGO_URI` env var if provided - otherwise defaults to `mongodb://localhost:27017/logs` - Frontend uses: - `VITE_API_BASE_URL` if provided - otherwise defaults to `/api` Optional frontend env file: ```text frontend/.env VITE_API_BASE_URL=http://localhost:5000 ``` --- ## Troubleshooting ### `npm ERR! enoent package.json` You are in wrong folder. Run frontend commands inside: ```powershell cd C:\Users\User\Desktop\Devops_Project\frontend ``` ### Frontend shows `Failed to fetch` or `Request failed: 500` 1. Confirm backend is running: - `http://localhost:5000/health` 2. Confirm MongoDB is running: - `docker ps` 3. Restart backend after Mongo starts: - `python app.py` ### Port already in use (`5000` or `5173`) Stop old processes/terminals and restart services. --- ## Stop Services ### Stop frontend/backend Press `Ctrl + C` in their terminals. ### Stop MongoDB container ```powershell docker stop mongodb-local ``` ### Remove MongoDB container (optional) ```powershell docker rm mongodb-local ``` # DevOps-01
+# Log Monitoring Dashboard (Flask + React + MongoDB)
+
+A containerized, real-time log monitoring dashboard designed for a complete DevOps pipeline deployment.
+
+## Tech Stack
+- **Frontend:** React (Vite)
+- **Backend:** Python Flask
+- **Database:** MongoDB
+- **Containerization:** Docker & Docker Compose
+- **CI/CD:** GitHub Actions
+- **Cloud Hosting:** AWS EC2 (t2.medium)
+- **IaC:** Terraform
+
+## Project Structure
+```text
+Devops_Project/
+├── backend/
+│   ├── app.py 
+│   ├── requirements.txt 
+│   └── Dockerfile
+├── frontend/
+│   ├── package.json 
+│   ├── vite.config.js 
+│   └── src/ 
+├── terraform/
+│   └── main.tf
+├── .github/workflows/
+│   └── main.yml
+├── docker-compose.yml
+└── README.md
