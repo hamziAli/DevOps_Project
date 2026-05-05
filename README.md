@@ -31,3 +31,6 @@ Devops_Project/
 │   └── main.yml
 ├── docker-compose.yml  # Multi-container orchestration
 └── README.md
+```
+## App Running
+![App Running # 1](screenshots/App-Running-1.jpeg)

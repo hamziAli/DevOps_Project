@@ -11,3 +11,4 @@ frontend/dist/
 terraform.tfstate
 terraform.tfstate.*
 *.tfvars
+frontend/src/App.jsx
