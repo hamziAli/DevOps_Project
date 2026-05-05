@@ -55,21 +55,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy via SSH
+- name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/log-monitoring-dashboard
+            # 1. Install Git and the Docker Compose plugin
+            sudo apt-get update -y
+            sudo apt-get install -y git docker-compose-plugin
 
-            # Pull latest code
+            # 2. Clone the repository if it doesn't exist yet
+            if [ ! -d "DevOps_Project" ]; then
+              git clone https://github.com/hamziAli/DevOps_Project.git
+            fi
+
+            # 3. Navigate into the correct project folder
+            cd DevOps_Project
+
+            # 4. Pull the latest code from GitHub
             git pull origin main
 
-            # Rebuild and restart all containers
-            docker compose down
-            docker compose up -d --build
-
-            # Show running containers
-            docker compose ps
+            # 5. Rebuild and restart the containers
+            sudo docker compose down
+            sudo docker compose up -d --build
