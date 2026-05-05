@@ -34,3 +34,4 @@ Devops_Project/
 ```
 ## App Running
 ![App Running # 1](screenshots/App-Running-1.jpeg)
+![App Running # 2](screenshots/App-Running-2.jpeg)
