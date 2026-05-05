@@ -73,3 +73,16 @@ jobs:
             
             # 4. Show running containers
             sudo docker-compose ps
+            
+            # 4. Navigate into the correct project folder
+            cd DevOps_Project
+
+            # 5. Pull the latest code from GitHub
+            git pull origin main
+
+            # 6. Inject the exact AWS IP for the React frontend
+            echo "VITE_API_BASE_URL=http://${{ secrets.EC2_HOST }}:5000" > ./frontend/.env
+
+            # 7. Rebuild and restart the containers
+            sudo docker compose down
+            sudo docker compose up -d --build
