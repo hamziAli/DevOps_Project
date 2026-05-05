@@ -50,11 +50,9 @@ jobs:
     name: Deploy to EC2
     runs-on: ubuntu-latest
     needs: build
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -65,18 +63,14 @@ jobs:
             # 1. Install Git and the Docker Compose plugin
             sudo apt-get update -y
             sudo apt-get install -y git docker-compose-plugin
-
             # 2. Clone the repository if it doesn't exist yet
             if [ ! -d "DevOps_Project" ]; then
               git clone https://github.com/hamziAli/DevOps_Project.git
             fi
-
             # 3. Navigate into the correct project folder
             cd DevOps_Project
-
             # 4. Pull the latest code from GitHub
             git pull origin main
-
             # 5. Rebuild and restart the containers
             sudo docker compose down
             sudo docker compose up -d --build
